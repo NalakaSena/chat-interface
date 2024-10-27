@@ -12,7 +12,7 @@
 
 	import { getKnowledgeItems } from '$lib/apis/knowledge';
 	import { getFunctions } from '$lib/apis/functions';
-	import { getModels as _getModels, getVersionUpdates } from '$lib/apis';
+	import { getModels as _getModels } from '$lib/apis';
 	import { getAllChatTags } from '$lib/apis/chats';
 	import { getPrompts } from '$lib/apis/prompts';
 	import { getTools } from '$lib/apis/tools';
@@ -195,39 +195,39 @@
 			}
 
 			// Check for version updates
-			if ($user.role === 'admin') {
-				// Check if the user has dismissed the update toast in the last 24 hours
-				if (localStorage.dismissedUpdateToast) {
-					const dismissedUpdateToast = new Date(Number(localStorage.dismissedUpdateToast));
-					const now = new Date();
+			// if ($user.role === 'admin') {
+			// 	// Check if the user has dismissed the update toast in the last 24 hours
+			// 	if (localStorage.dismissedUpdateToast) {
+			// 		const dismissedUpdateToast = new Date(Number(localStorage.dismissedUpdateToast));
+			// 		const now = new Date();
 
-					if (now - dismissedUpdateToast > 24 * 60 * 60 * 1000) {
-						checkForVersionUpdates();
-					}
-				} else {
-					checkForVersionUpdates();
-				}
-			}
+			// 		if (now - dismissedUpdateToast > 24 * 60 * 60 * 1000) {
+			// 			checkForVersionUpdates();
+			// 		}
+			// 	} else {
+			// 		checkForVersionUpdates();
+			// 	}
+			// }
 			await tick();
 		}
 
 		loaded = true;
 	});
 
-	const checkForVersionUpdates = async () => {
-		version = await getVersionUpdates(localStorage.token).catch((error) => {
-			return {
-				current: WEBUI_VERSION,
-				latest: WEBUI_VERSION
-			};
-		});
-	};
+	// const checkForVersionUpdates = async () => {
+	// 	version = await getVersionUpdates(localStorage.token).catch((error) => {
+	// 		return {
+	// 			current: WEBUI_VERSION,
+	// 			latest: WEBUI_VERSION
+	// 		};
+	// 	});
+	// };
 </script>
 
 <SettingsModal bind:show={$showSettings} />
 <ChangelogModal bind:show={$showChangelog} />
 
-{#if version && compareVersion(version.latest, version.current)}
+<!-- {#if version && compareVersion(version.latest, version.current)}
 	<div class=" absolute bottom-8 right-8 z-50" in:fade={{ duration: 100 }}>
 		<UpdateInfoToast
 			{version}
@@ -237,7 +237,7 @@
 			}}
 		/>
 	</div>
-{/if}
+{/if} -->
 
 <div class="app relative">
 	<div

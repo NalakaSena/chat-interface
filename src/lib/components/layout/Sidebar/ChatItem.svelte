@@ -89,7 +89,7 @@
 
 <ShareChatModal bind:show={showShareChatModal} chatId={chat.id} />
 
-<div class=" w-full pr-2 relative group">
+<div class=" w-full pr-2 relative group hover:text-gray-900 dark:text-gray-200 ">
 	{#if confirmEdit}
 		<div
 			class=" w-full flex justify-between rounded-xl px-3 py-2 {chat.id === $chatId || confirmEdit

@@ -50,6 +50,7 @@ from open_webui.apps.webui.models.auths import Auths
 from open_webui.apps.webui.models.functions import Functions
 from open_webui.apps.webui.models.models import Models
 from open_webui.apps.webui.models.users import UserModel, Users
+from open_webui.apps.webui.models.usermodels import UserMapModels
 
 from open_webui.apps.webui.utils import load_function_module_by_id
 
@@ -1056,15 +1057,34 @@ async def get_models(user=Depends(get_verified_user)):
         if "pipeline" not in model or model["pipeline"].get("type", None) != "filter"
     ]
 
-    if app.state.config.ENABLE_MODEL_FILTER:
-        if user.role == "user":
-            models = list(
-                filter(
-                    lambda model: model["id"] in app.state.config.MODEL_FILTER_LIST,
-                    models,
-                )
-            )
-            return {"data": models}
+    if user.role == "user":
+        # Fetch models assigned to the current user from the `user_models` table
+        user_models = UserMapModels.get_models_by_user_id(user.id)
+        assigned_model_ids = [user_model.model_id for user_model in user_models]
+
+        # Filter models based on assigned_model_ids
+
+        for model in models:
+            log.info(f"Model ID: {model['id']} - Type: {type(model['id'])}")
+
+        for assigned_model_id in assigned_model_ids:
+            log.info(f"Model ID: {assigned_model_id} - Type: {type(assigned_model_id)}")
+
+        models = [model for model in models if str(model['id']) in assigned_model_ids]
+        return {"data": models}
+
+    # log.info(models)
+    # # log.info(assigned_model_ids)
+
+    # if app.state.config.ENABLE_MODEL_FILTER:
+    #     if user.role == "user":
+    #         models = list(
+    #             filter(
+    #                 lambda model: model["id"] in app.state.config.MODEL_FILTER_LIST,
+    #                 models,
+    #             )
+    #         )
+    #         return {"data": models}
 
     return {"data": models}
 

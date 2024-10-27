@@ -1,5 +1,8 @@
 <script lang="ts">
 	import CitationsModal from './CitationsModal.svelte';
+	import {
+		user,	
+	} from '$lib/stores';
 
 	export let citations = [];
 
@@ -43,7 +46,7 @@
 
 <CitationsModal bind:show={showCitationModal} citation={selectedCitation} />
 
-{#if _citations.length > 0}
+{#if _citations.length > 0 && $user?.role === 'admin'}
 	<div class="mt-1 mb-2 w-full flex gap-1 items-center flex-wrap">
 		{#each _citations as citation, idx}
 			<div class="flex gap-1 text-xs font-semibold">

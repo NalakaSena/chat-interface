@@ -1,34 +1,43 @@
-services:
-  ollama:
-    volumes:
-      - ollama:/root/.ollama
-    container_name: ollama
-    pull_policy: always
-    tty: true
-    restart: unless-stopped
-    image: ollama/ollama:${OLLAMA_DOCKER_TAG-latest}
+version: '3'
 
-  open-webui:
+services:
+  # Chat Interface service built with custom build arguments
+  chat-interface:
     build:
       context: .
-      args:
-        OLLAMA_BASE_URL: '/ollama'
       dockerfile: Dockerfile
-    image: ghcr.io/open-webui/open-webui:${WEBUI_DOCKER_TAG-main}
-    container_name: open-webui
+      args:
+        USE_CUDA: "false"
+        USE_OLLAMA: "false"
+    container_name: chat-interface
     volumes:
-      - open-webui:/app/backend/data
+      - chat-data:/app/backend/data
     depends_on:
-      - ollama
+      - db
     ports:
-      - ${OPEN_WEBUI_PORT-3000}:8080
+      - "8080:8080"  # Map port 8080 on the host to port 8080 in the container
     environment:
-      - 'OLLAMA_BASE_URL=http://ollama:11434'
-      - 'WEBUI_SECRET_KEY='
+      - 'DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres' # PostgreSQL connection string
+      - 'WEBUI_SECRET_KEY=' # Set this with a secret key for security
+      - 'CHAT_MODE=true' # Enable chat mode
     extra_hosts:
       - host.docker.internal:host-gateway
     restart: unless-stopped
 
+  # PostgreSQL database service
+  db:
+    image: postgres:13
+    container_name: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
 volumes:
-  ollama: {}
-  open-webui: {}
+  chat-data: {}
+  db-data: {}

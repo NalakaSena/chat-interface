@@ -225,6 +225,8 @@
 										bind:value={_user.password}
 										placeholder={$i18n.t('Enter Your Password')}
 										autocomplete="off"
+										pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{'{'}8,{'}'}"
+            							title="Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character."
 									/>
 								</div>
 							</div>

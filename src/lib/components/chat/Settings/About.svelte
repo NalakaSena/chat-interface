@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getVersionUpdates } from '$lib/apis';
+	// import { getVersionUpdates } from '$lib/apis';
 	import { getOllamaVersion } from '$lib/apis/ollama';
 	import { WEBUI_BUILD_HASH, WEBUI_VERSION } from '$lib/constants';
 	import { WEBUI_NAME, config, showChangelog } from '$lib/stores';
@@ -12,34 +12,34 @@
 
 	let ollamaVersion = '';
 
-	let updateAvailable = null;
+	// let updateAvailable = null;
 	let version = {
 		current: '',
 		latest: ''
 	};
 
-	const checkForVersionUpdates = async () => {
-		updateAvailable = null;
-		version = await getVersionUpdates(localStorage.token).catch((error) => {
-			return {
-				current: WEBUI_VERSION,
-				latest: WEBUI_VERSION
-			};
-		});
+	// const checkForVersionUpdates = async () => {
+	// 	updateAvailable = null;
+	// 	version = await getVersionUpdates(localStorage.token).catch((error) => {
+	// 		return {
+	// 			current: WEBUI_VERSION,
+	// 			latest: WEBUI_VERSION
+	// 		};
+	// 	});
 
-		console.log(version);
+	// 	console.log(version);
 
-		updateAvailable = compareVersion(version.latest, version.current);
-		console.log(updateAvailable);
-	};
+	// 	updateAvailable = compareVersion(version.latest, version.current);
+	// 	console.log(updateAvailable);
+	// };
 
-	onMount(async () => {
-		ollamaVersion = await getOllamaVersion(localStorage.token).catch((error) => {
-			return '';
-		});
+	// onMount(async () => {
+	// 	ollamaVersion = await getOllamaVersion(localStorage.token).catch((error) => {
+	// 		return '';
+	// 	});
 
-		checkForVersionUpdates();
-	});
+	// 	checkForVersionUpdates();
+	// });
 </script>
 
 <div class="flex flex-col h-full justify-between space-y-3 text-sm mb-6">
