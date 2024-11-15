@@ -179,3 +179,24 @@ input[type='number'] {
 .bg-gray-950-90 {
 	background-color: rgba(var(--color-gray-950, #0d0d0d), 0.9);
 }
+
+.bg-container {
+	background-image: url('./assets/images/bg-image.jpg'); /* Light mode image */
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.dark .bg-container {
+	background-image: url('./assets/images/bg-image-dark.png'); /* Light mode image */
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.bg-filter {
+	background-color: #ffffff40;
+}
+.dark .bg-filter {
+	background-color: #0000004a;
+}
